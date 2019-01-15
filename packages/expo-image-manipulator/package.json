@@ -1,0 +1,25 @@
+{
+  "name": "expo-image-manipulator",
+  "version": "1.0.0",
+  "description": "ExpoImageManipulator standalone module",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {},
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-image-manipulator"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/expo/expo.git"
+  },
+  "author": "650 Industries, Inc.",
+  "license": "MIT",
+  "homepage": "https://github.com/expo/expo/tree/master/packages/expo-image-manipulator",
+  "dependencies": {},
+  "peerDependencies": {
+    "expo-core": "~2.0.0"
+  },
+  "gitHead": "f15abc53c111bd0438cd36dc456c59cfa7c56a58"
+}
