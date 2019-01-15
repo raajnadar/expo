@@ -145,6 +145,7 @@ dependencies {
   compileOnly 'host.exp.exponent:expo-barcode-scanner:2.0.0'
   compileOnly 'host.exp.exponent:expo-contacts:2.0.0'
   compileOnly 'host.exp.exponent:expo-ads-admob:2.0.0'
+  compileOnly 'host.exp.exponent:expo-image-manipulator:1.0.0'
   compileOnly 'host.exp.exponent:expo-local-authentication:2.0.0'
   compileOnly 'host.exp.exponent:expo-localization:2.0.0'
   compileOnly 'host.exp.exponent:expo-react-native-adapter:2.0.0'
@@ -196,6 +197,7 @@ dependencies {
   api project(':expo-gl-cpp')
   api project(':expo-google-sign-in')
   api project(':expo-image-loader-interface')
+  api project(':expo-image-manipulator')
   api project(':expo-local-authentication')
   api project(':expo-localization')
   api project(':expo-location')

@@ -1,7 +1,7 @@
 {
   "name": "expo-image-manipulator",
   "version": "1.0.0",
-  "description": "ExpoImageManipulator standalone module",
+  "description": "Expo Image Manipulator standalone module",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {},

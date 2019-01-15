@@ -31,6 +31,7 @@ import expo.core.interfaces.ActivityProvider;
 import expo.core.interfaces.ExpoMethod;
 import expo.core.interfaces.ModuleRegistryConsumer;
 import expo.core.Promise;
+import expo.core.utilieties.FileUtilities;
 
 public class PrintModule extends ExportedModule implements ModuleRegistryConsumer {
 
@@ -178,7 +179,7 @@ public class PrintModule extends ExportedModule implements ModuleRegistryConsume
       @Override
       public void onRenderFinished(PrintDocumentAdapter document, File outputFile, int numberOfPages) {
         Bundle result = new Bundle();
-        String uri = FileUtils.uriFromFile(outputFile).toString();
+        String uri = FileUtilities.uriFromFile(outputFile).toString();
 
         if (options.containsKey("base64") && (Boolean)options.get("base64")) {
           try {
@@ -232,7 +233,7 @@ public class PrintModule extends ExportedModule implements ModuleRegistryConsume
   }
 
   private String generateFilePath() throws IOException {
-    return FileUtils.generateOutputPath(mContext.getCacheDir(), "Print", ".pdf");
+    return FileUtilities.generateOutputPath(mContext.getCacheDir(), "Print", ".pdf");
   }
 
   private String encodeFromFile(File file) throws IOException {

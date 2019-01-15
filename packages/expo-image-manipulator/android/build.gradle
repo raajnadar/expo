@@ -47,7 +47,7 @@ android {
     minSdkVersion 21
     targetSdkVersion 26
     versionCode 1
-    versionName '1.0.0'
+    versionName "1.0.0"
   }
   lintOptions {
     abortOnError false
@@ -66,4 +66,7 @@ if (new File(rootProject.projectDir.parentFile, 'pubspec.yaml').exists()) {
 
 dependencies {
   expendency 'expo-core'
+
+  api 'com.android.support:support-annotations:28.0.0'
+  api 'com.facebook.fresco:fresco:1.10.0'
 }

@@ -27,6 +27,7 @@ import expo.core.ModuleRegistry;
 import expo.core.Promise;
 import expo.core.interfaces.services.EventEmitter;
 import expo.core.interfaces.services.UIManager;
+import expo.core.utilieties.FileUtilities;
 import expo.interfaces.barcodescanner.BarCodeScanner;
 import expo.interfaces.barcodescanner.BarCodeScannerProvider;
 import expo.interfaces.barcodescanner.BarCodeScannerResult;
@@ -41,7 +42,6 @@ import expo.modules.camera.tasks.FaceDetectorAsyncTask;
 import expo.modules.camera.tasks.FaceDetectorAsyncTaskDelegate;
 import expo.modules.camera.tasks.PictureSavedDelegate;
 import expo.modules.camera.tasks.ResolveTakenPictureAsyncTask;
-import expo.modules.camera.utils.FileSystemUtils;
 import expo.modules.camera.utils.ImageDimensions;
 
 public class ExpoCameraView extends CameraView implements LifecycleEventListener, BarCodeScannerAsyncTaskDelegate, FaceDetectorAsyncTaskDelegate, PictureSavedDelegate, ExpoCameraViewInterface {
@@ -189,7 +189,7 @@ public class ExpoCameraView extends CameraView implements LifecycleEventListener
 
   public void record(Map<String, Object> options, final Promise promise, File cacheDirectory) {
     try {
-      String path = FileSystemUtils.generateOutputPath(cacheDirectory, "Camera", ".mp4");
+      String path = FileUtilities.generateOutputPath(cacheDirectory, "Camera", ".mp4");
       double maxDuration = -1;
       if (options.get(MAX_DURATION_KEY) != null) {
         maxDuration = (double) options.get(MAX_DURATION_KEY);

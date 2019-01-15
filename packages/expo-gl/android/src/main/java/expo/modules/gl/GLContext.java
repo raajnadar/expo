@@ -31,7 +31,7 @@ import expo.core.ModuleRegistry;
 import expo.core.Promise;
 import expo.core.interfaces.JavaScriptContextProvider;
 import expo.core.interfaces.services.UIManager;
-import expo.modules.gl.utils.FileSystemUtils;
+import expo.core.utilieties.FileUtilities;
 
 import static android.opengl.GLES30.*;
 import static expo.modules.gl.cpp.EXGL.*;
@@ -289,7 +289,7 @@ public class GLContext {
       }
 
       try {
-        path = FileSystemUtils.generateOutputPath(context.getCacheDir(), "GLView", extension);
+        path = FileUtilities.generateOutputPath(context.getCacheDir(), "GLView", extension);
         output = new FileOutputStream(path);
         bitmap.compress(compressFormat, mCompress, output);
         output.flush();
