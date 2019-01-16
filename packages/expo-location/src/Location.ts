@@ -18,6 +18,7 @@ interface LocationOptions {
   timeInterval?: number,
   distanceInterval?: number,
   timeout?: number,
+  mayShowUserSettingsDialog?: boolean,
 };
 
 interface LocationData {
@@ -118,6 +119,13 @@ export async function getProviderStatusAsync(): Promise<ProviderStatus> {
   return ExpoLocation.getProviderStatusAsync();
 }
 
+export async function enableNetworkProviderAsync(): Promise<void> {
+  if (Platform.OS === 'ios') {
+    return Promise.resolve();
+  }
+  return ExpoLocation.enableNetworkProviderAsync();
+}
+
 export async function getCurrentPositionAsync(options: LocationOptions = {}): Promise<LocationData> {
   return ExpoLocation.getCurrentPositionAsync(options);
 }
@@ -133,7 +141,7 @@ export async function getHeadingAsync(): Promise<HeadingData> {
       if (headingEventSub) {
         let tries = 0;
         const headingSub = LocationEventEmitter.addListener(
-          'Exponent.headingChanged',
+          'Expo.headingChanged',
           ({ heading }: { heading: HeadingData }) => {
             if (heading.accuracy > 1 || tries > 5) {
               resolve(heading);
@@ -178,7 +186,7 @@ export async function watchHeadingAsync(callback: HeadingCallback): Promise<obje
   }
 
   headingEventSub = LocationEventEmitter.addListener(
-    'Exponent.headingChanged',
+    'Expo.headingChanged',
     ({ watchId, heading }: { watchId: string, heading: HeadingData }) => {
       const callback = watchCallbacks[watchId];
       if (callback) {
@@ -216,7 +224,7 @@ function _removeHeadingWatcher(watchId) {
 function _maybeInitializeEmitterSubscription() {
   if (!deviceEventSubscription) {
     deviceEventSubscription = LocationEventEmitter.addListener(
-      'Exponent.locationChanged',
+      'Expo.locationChanged',
       ({ watchId, location }: { watchId: string, location: LocationData }) => {
         const callback = watchCallbacks[watchId];
         if (callback) {

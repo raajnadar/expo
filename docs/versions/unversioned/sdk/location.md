@@ -33,6 +33,7 @@ Get the current position of the device.
 -   **options (_object_)** -- A map of options:
     -   **accuracy (_[Location.Accuracy](#expolocationaccuracy)_)** -- Location manager accuracy. Pass one of [Location.Accuracy](#expolocationaccuracy) enum values. For low-accuracy the implementation can avoid geolocation providers that consume a significant amount of power (such as GPS).
     -   **maximumAge (_number_)** -- (Android only). If specified, allow returning a previously cached position that is at most this old in milliseconds. If not specified, always gets a new location. On iOS this option is ignored and a new location is always returned.
+    -   **mayShowUserSettingsDialog (_boolean_)** -- Specifies whether to ask the user to turn on improved accuracy location mode which uses Wi-Fi, cell networks and GPS sensor. The dialog can be shown only when the location mode is set to **Device only**. Defaults to `true`. (**Android only**)
 
 #### Returns
 
@@ -48,6 +49,7 @@ Subscribe to location updates from the device. Please note that updates will onl
     -   **accuracy (_[Location.Accuracy](#expolocationaccuracy)_** -- Location manager accuracy. Pass one of [Location.Accuracy](#expolocationaccuracy) enum values. For low accuracy the implementation can avoid geolocation providers that consume a significant amount of power (such as GPS).
     -   **timeInterval (_number_)** -- Minimum time to wait between each update in milliseconds.
     -   **distanceInterval (_number_)** -- Receive updates only when the location has changed by at least this distance in meters.
+    -   **mayShowUserSettingsDialog (_boolean_)** -- Specifies whether to ask the user to turn on improved accuracy location mode which uses Wi-Fi, cell networks and GPS sensor. The dialog can be shown only when the location mode is set to **Device only**. Defaults to `true`. (**Android only**)
 
 -   **callback (_function_)** --
 

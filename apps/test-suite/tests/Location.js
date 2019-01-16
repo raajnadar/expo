@@ -14,6 +14,22 @@ export async function test(t) {
   const shouldSkipTestsRequiringPermissions = await TestUtils.shouldSkipTestsRequiringPermissionsAsync();
   const describeWithPermissions = shouldSkipTestsRequiringPermissions ? t.xdescribe : t.describe;
 
+  function testLocationShape(location) {
+    t.expect(typeof location === 'object').toBe(true);
+
+    const { coords, timestamp } = location;
+    const { latitude, longitude, altitude, accuracy, altitudeAccuracy, heading, speed } = coords;
+
+    t.expect(typeof latitude === 'number').toBe(true);
+    t.expect(typeof longitude === 'number').toBe(true);
+    t.expect(typeof altitude === 'number').toBe(true);
+    t.expect(typeof accuracy === 'number').toBe(true);
+    t.expect(Platform.OS !== 'ios' || typeof altitudeAccuracy === 'number').toBe(true);
+    t.expect(typeof heading === 'number').toBe(true);
+    t.expect(typeof speed === 'number').toBe(true);
+    t.expect(typeof timestamp === 'number').toBe(true);
+  }
+
   t.describe('Location', () => {
     t.describe('Location.getProviderStatusAsync()', () => {
       const timeout = 1000;
@@ -71,18 +87,8 @@ export async function test(t) {
             return Permissions.askAsync(Permissions.LOCATION);
           });
           if (status === 'granted') {
-            const {
-              coords: { latitude, longitude, altitude, accuracy, altitudeAccuracy, heading, speed },
-              timestamp,
-            } = await Location.getCurrentPositionAsync(options);
-            t.expect(typeof latitude === 'number').toBe(true);
-            t.expect(typeof longitude === 'number').toBe(true);
-            t.expect(typeof altitude === 'number').toBe(true);
-            t.expect(typeof accuracy === 'number').toBe(true);
-            t.expect(Platform.OS !== 'ios' || typeof altitudeAccuracy === 'number').toBe(true);
-            t.expect(typeof heading === 'number').toBe(true);
-            t.expect(typeof speed === 'number').toBe(true);
-            t.expect(typeof timestamp === 'number').toBe(true);
+            const location = await Location.getCurrentPositionAsync(options);
+            testLocationShape(location);
           } else {
             let error;
             try {
@@ -144,6 +150,44 @@ export async function test(t) {
         },
         timeout + second
       );
+
+      t.it('resolves when called simultaneously', async () => {
+        await Promise.all([
+          Location.getCurrentPositionAsync(),
+          Location.getCurrentPositionAsync(),
+          Location.getCurrentPositionAsync(),
+        ]);
+      });
+    });
+
+    describeWithPermissions('Location.watchPositionAsync()', () => {
+      t.it('gets a result of the correct shape', async () => {
+        await new Promise(async (resolve, reject) => {
+          const subscriber = await Location.watchPositionAsync({}, location => {
+            testLocationShape(location);
+            subscriber.remove();
+            resolve();
+          });
+        });
+      });
+
+      t.it('can be called simultaneously', async () => {
+        const spy = t.jasmine.createSpy('watchPosition');
+        const subscribers = await Promise.all([
+          Location.watchPositionAsync({}, spy),
+          Location.watchPositionAsync({}, spy),
+          Location.watchPositionAsync({}, spy),
+        ]);
+
+        await new Promise((resolve, reject) => {
+          setTimeout(() => {
+            t.expect(spy).toHaveBeenCalledTimes(3);
+            resolve();
+          }, 1000);
+        });
+
+        subscribers.forEach(subscriber => subscriber.remove());
+      });
     });
 
     describeWithPermissions('Location.getHeadingAsync()', () => {

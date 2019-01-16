@@ -48,6 +48,12 @@ const googleApiUrl = 'https://maps.googleapis.com/maps/api/geocode/json';
 export async function getProviderStatusAsync() {
     return ExpoLocation.getProviderStatusAsync();
 }
+export async function enableNetworkProviderAsync() {
+    if (Platform.OS === 'ios') {
+        return Promise.resolve();
+    }
+    return ExpoLocation.enableNetworkProviderAsync();
+}
 export async function getCurrentPositionAsync(options = {}) {
     return ExpoLocation.getCurrentPositionAsync(options);
 }
@@ -60,7 +66,7 @@ export async function getHeadingAsync() {
             // If there is already a compass active (would be a watch)
             if (headingEventSub) {
                 let tries = 0;
-                const headingSub = LocationEventEmitter.addListener('Exponent.headingChanged', ({ heading }) => {
+                const headingSub = LocationEventEmitter.addListener('Expo.headingChanged', ({ heading }) => {
                     if (heading.accuracy > 1 || tries > 5) {
                         resolve(heading);
                         LocationEventEmitter.removeSubscription(headingSub);
@@ -104,7 +110,7 @@ export async function watchHeadingAsync(callback) {
     if (headingEventSub) {
         _removeHeadingWatcher(headingId);
     }
-    headingEventSub = LocationEventEmitter.addListener('Exponent.headingChanged', ({ watchId, heading }) => {
+    headingEventSub = LocationEventEmitter.addListener('Expo.headingChanged', ({ watchId, heading }) => {
         const callback = watchCallbacks[watchId];
         if (callback) {
             callback(heading);
@@ -137,7 +143,7 @@ function _removeHeadingWatcher(watchId) {
 // End Compass Module
 function _maybeInitializeEmitterSubscription() {
     if (!deviceEventSubscription) {
-        deviceEventSubscription = LocationEventEmitter.addListener('Exponent.locationChanged', ({ watchId, location }) => {
+        deviceEventSubscription = LocationEventEmitter.addListener('Expo.locationChanged', ({ watchId, location }) => {
             const callback = watchCallbacks[watchId];
             if (callback) {
                 callback(location);

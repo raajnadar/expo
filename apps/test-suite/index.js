@@ -24,43 +24,43 @@ async function getTestModulesAsync() {
   let modules = [
     // require('./tests/Basic1'),
     // require('./tests/Basic2'),
-    require('./tests/Import1'),
-    require('./tests/Import2'),
-    require('./tests/Import3'),
-    require('./tests/Asset'),
-    require('./tests/Audio'),
-    require('./tests/Constants'),
-    require('./tests/Contacts'),
-    require('./tests/FileSystem'),
-    require('./tests/GoogleSignIn'),
-    require('./tests/Localization'),
+    // require('./tests/Import1'),
+    // require('./tests/Import2'),
+    // require('./tests/Import3'),
+    // require('./tests/Asset'),
+    // require('./tests/Audio'),
+    // require('./tests/Constants'),
+    // require('./tests/Contacts'),
+    // require('./tests/FileSystem'),
+    // require('./tests/GoogleSignIn'),
+    // require('./tests/Localization'),
     require('./tests/Location'),
-    require('./tests/Linking'),
-    require('./tests/Recording'),
-    require('./tests/SecureStore'),
-    require('./tests/Segment'),
-    require('./tests/Speech'),
-    require('./tests/SQLite'),
-    require('./tests/Payments'),
-    require('./tests/AdMobInterstitial'),
-    require('./tests/AdMobBanner'),
-    require('./tests/AdMobPublisherBanner'),
-    require('./tests/AdMobRewarded'),
-    require('./tests/Video'),
-    require('./tests/Permissions'),
-    require('./tests/MediaLibrary'),
-    require('./tests/Notifications'),
-    require('./tests/FBNativeAd'),
-    require('./tests/FBBannerAd'),
+    // require('./tests/Linking'),
+    // require('./tests/Recording'),
+    // require('./tests/SecureStore'),
+    // require('./tests/Segment'),
+    // require('./tests/Speech'),
+    // require('./tests/SQLite'),
+    // require('./tests/Payments'),
+    // require('./tests/AdMobInterstitial'),
+    // require('./tests/AdMobBanner'),
+    // require('./tests/AdMobPublisherBanner'),
+    // require('./tests/AdMobRewarded'),
+    // require('./tests/Video'),
+    // require('./tests/Permissions'),
+    // require('./tests/MediaLibrary'),
+    // require('./tests/Notifications'),
+    // require('./tests/FBNativeAd'),
+    // require('./tests/FBBannerAd'),
     require('./tests/TaskManager'),
   ];
   if (Constants.isDevice) {
-    modules = modules.concat([require('./tests/Brightness')]);
-    modules = modules.concat([require('./tests/BarCodeScanner')]);
+    // modules = modules.concat([require('./tests/Brightness')]);
+    // modules = modules.concat([require('./tests/BarCodeScanner')]);
     if (Platform.OS === 'android') {
-      modules = modules.concat([require('./tests/JSC')]);
+      // modules = modules.concat([require('./tests/JSC')]);
       // The Camera tests are flaky on iOS, i.e. they fail randomly
-      modules = modules.concat([require('./tests/Camera')]);
+      // modules = modules.concat([require('./tests/Camera')]);
     }
   }
   return modules;
