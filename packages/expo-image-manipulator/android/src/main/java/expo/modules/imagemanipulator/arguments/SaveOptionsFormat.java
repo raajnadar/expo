@@ -3,7 +3,7 @@ package expo.modules.imagemanipulator.arguments;
 import android.graphics.Bitmap;
 
 public enum SaveOptionsFormat {
-  JPEG("jpg", Bitmap.CompressFormat.JPEG, ".jpg"),
+  JPEG("jpeg", Bitmap.CompressFormat.JPEG, ".jpg"),
   PNG("png", Bitmap.CompressFormat.PNG, ".png");
 
   private final String mFormat;

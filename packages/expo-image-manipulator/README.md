@@ -1,10 +1,12 @@
 # expo-image-manipulator
 
-`expo-image-manipulator` module
+`expo-image-manipulator` module allows image manipulation.
 
 ## Installation
 
-Install the package from `npm` registry:
+*If your app is running in [Expo](https://expo.io) then everything is already set up for you, just `import { ImageManipulator } from 'expo';`*
+
+Otherwise you need to install the package from `npm` registry:
 
 `yarn add expo-image-manipulator` or `npm install expo-image-manipulator`
 
@@ -32,33 +34,69 @@ and run `pod install` under the parent directory of your `Podfile`.
     ```gradle
     compile project(':expo-image-manipulator')
     ```
-3.  Add `new ExpoImageManipulatorPackage()` to your module registry provider in `MainApplication.java`.
+3.  Add `new ImageManipulatorPackage()` to your module registry provider in `MainApplication.java`.
 
 ## Usage
 
-<!-- Describe prerequirements that need to be meet for your module to run properly -->
-<!-- e.g. You must request permission to access the user's location before attempting to get it. To do this, you will want to use the [Permissions](https://github.com/expo/tree/master/packages/expo-permissions) API. You can see this in practice in the following example. -->
+This code snippet takes advantage of `expo-asset` module.
 
-<!-- Provide some js example -->
 ```javascript
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import * as Permissions from 'expo-permissions';
-import * as ExpoImageManipulator from 'expo-image-manipulator';
+import { Button, View, StyleSheet } from 'react-native';
+import { Asset } from 'expo-asset';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 export default class App extends Component {
+  state = { image: null };
+
   componentDidMount() {
-    doGreatJob();
+    this.loadImage();
   }
 
-  doGreatJob = async () => {
-    await ExpoImageManipulator.someGreatMethod();
-  }
+  loadImage = async () => {
+    const image = Asset.fromModule(require('../path/to/image.png'));
+    await image.downloadAsync();
+    this.setState({ image });
+  };
+
+  manipulateImage = async () => {
+    if (this.state.image) {
+      alert('Image is unavailable ... :(');
+      return;
+    }
+    const result = await ImageManipulator.manipulateAsync(
+      this.state.image.localUri || this.state.image.uri,
+      [{
+        rotate: 180,
+      }, {
+        flip: { vertical: true },
+      }, {
+        crop: {
+          originX: this.state.image.width / 4,
+          originY: this.state.image.height / 4,
+          width: this.state.image.width / 2,
+          height: this.state.image.width / 2,
+        },
+      }],
+    );
+    this.setState({ image: result });
+  };
 
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.paragraph}>'expo-image-manipulator' example</Text>
+        <View style={styles.imageContainer}>
+          {this.state.image && (
+            <Image
+              source={{ uri: this.state.image.localUri || this.state.image.uri }}
+              style={styles.image}
+            />
+          )}
+        </View>
+        <TouchableOpacity onPress={this.manipulateImage} style={styles.button}>
+          <Text style={styles.buttonText}>Manipulate photo</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -77,32 +115,30 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
   },
+  button: {
+    padding: 8,
+    borderRadius: 3,
+    backgroundColor: Colors.tintColor,
+    marginRight: 10,
+    marginBottom: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 12,
+  },
+  imageContainer: {
+    marginVertical: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 300,
+    height: 300,
+    resizeMode: 'contain',
+  },
 });
 ```
 
-## Methods
+## API & further documentation
 
-<!-- Provide methods description -->
-
-### `ExpoImageManipulator.someGreatMethod(options)`
-
-Do some great work! :D
-
-#### Arguments
-
--   **options (_object_)** --
-
-      A map of options:
-
-    -   **greatFlag (_boolean_)** -- Enable something great! Like even greater greatness! :D
-    -   **greatNumber (_number_)** -- Remeber to provider great number! :D
-    -   **greatString (_string_)** -- Do not forget about great string! :D
-
-#### Returns
-
-Returns something great! :D
-
--   **great (_object_)** -- The GREAT object! :D
-    -   **great (_number_)** -- Great number!
-    -   **greater (_string_)** -- Greater string!
-    -   **greatest (_boolean_)** -- Thre greatest boolean! :D
+See [Expo docs](https://docs.expo.io/versions/latest/sdk/imagemanipulator) for this universal module API documentation.
