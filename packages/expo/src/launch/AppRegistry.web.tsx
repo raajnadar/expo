@@ -19,8 +19,28 @@ type AppParameters = {
   rootTag?: HTMLElement | null;
   initialProps?: Record<string, any>;
   hydrate?: boolean;
+  /** Hydrate the whole document around `rootTag`, not `rootTag` alone. Needs `hydrate`. */
+  hydrateDocument?: boolean;
   callback?: () => void;
 };
+
+/**
+ * The document that the server renders around the app: `<html>` has `[head, body]`, `<body>` has
+ * `[root, tail]`. `useId` depends on these two arrays, so keep them as they are. React skips the
+ * server-only elements in `<head>` and in the tail, and the attributes of `<html>` and `<body>`
+ * stay as the server wrote them.
+ */
+function HydratedDocument({ rootTag, children }: { rootTag: HTMLElement; children: ReactNode }) {
+  return (
+    <html suppressHydrationWarning>
+      <head />
+      <body suppressHydrationWarning>
+        <div id={rootTag.id}>{children}</div>
+        {null}
+      </body>
+    </html>
+  );
+}
 
 const runnables: Record<string, Runnable> = {};
 
@@ -64,7 +84,7 @@ function registerComponent(appKey: string, componentProvider: ComponentProvider)
     },
 
     run: (appParameters: AppParameters) => {
-      const { hydrate, initialProps = {}, rootTag, callback } = appParameters;
+      const { hydrate, hydrateDocument, initialProps = {}, rootTag, callback } = appParameters;
 
       if (!rootTag) {
         throw new Error(`"rootTag" was not provided for appKey "${appKey}".`);
@@ -79,7 +99,12 @@ function registerComponent(appKey: string, componentProvider: ComponentProvider)
       const { createRoot, hydrateRoot } = require('react-dom/client');
 
       if (hydrate) {
-        const root = hydrateRoot(rootTag, element);
+        const root = hydrateDocument
+          ? hydrateRoot(
+              rootTag.ownerDocument,
+              <HydratedDocument rootTag={rootTag}>{element}</HydratedDocument>
+            )
+          : hydrateRoot(rootTag, element);
         if (callback) callback();
         return root;
       } else {

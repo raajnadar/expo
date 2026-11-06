@@ -5,6 +5,7 @@ import AppRegistry from './AppRegistry';
 
 declare namespace globalThis {
   const __EXPO_ROUTER_HYDRATE__: unknown;
+  const __EXPO_ROUTER_HYDRATE_DOCUMENT__: unknown;
 }
 
 type InitialProps = {
@@ -48,6 +49,7 @@ export default function registerRootComponent<P extends InitialProps>(
     AppRegistry.runApplication('main', {
       rootTag,
       hydrate: globalThis.__EXPO_ROUTER_HYDRATE__,
+      hydrateDocument: globalThis.__EXPO_ROUTER_HYDRATE_DOCUMENT__,
     });
   }
 }
